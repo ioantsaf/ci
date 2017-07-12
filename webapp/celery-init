@@ -1,0 +1,48 @@
+#!/bin/bash
+
+start(){
+  mkdir -p celery
+  celery multi start worker1 \
+      -A app.celery \
+      --pidfile="$HOME/ci/webapp/celery/%n.pid" \
+      --logfile="$HOME/ci/webapp/celery/%n%I.log"
+  RETVAL=$?
+  return $RETVAL
+}
+
+stop(){
+  celery multi stopwait worker1 --pidfile="$HOME/ci/webapp/celery/%n.pid"
+  RETVAL=$?
+  return $RETVAL
+}
+
+restart(){
+  celery multi restart worker1 \
+      -A app.celery \
+      --pidfile="$HOME/ci/webapp/celery/%n.pid" \
+      --logfile="$HOME/ci/webapp/celery/%n%I.log"
+  RETVAL=$?
+  return $RETVAL
+}
+
+RETVAL=0
+
+case "$1" in
+  start)
+    start
+    RETVAL=$?
+    ;;
+  stop)
+    stop
+    RETVAL=$?
+    ;;
+  restart)
+    restart
+    RETVAL=$?
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    RETVAL=1
+esac
+
+exit $RETVAL

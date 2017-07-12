@@ -1,0 +1,6 @@
+---
+
+app_name: "django_example"
+app_type: "django"
+staging_user: "ubuntu"
+production_user: "dwsdwdw"

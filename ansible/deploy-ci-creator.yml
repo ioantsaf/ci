@@ -1,0 +1,8 @@
+---
+
+- hosts: ci-creator
+
+  user: "{{ ci_creator_user }}"
+
+  roles:
+    - deploy-ci-creator

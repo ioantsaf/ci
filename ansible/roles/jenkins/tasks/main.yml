@@ -1,0 +1,20 @@
+---
+
+  - name: Build jenkins ansible image
+    docker_image:
+      path: "/home/{{ ci_user }}/ci/jenkins"
+      name: jenkins_ansible
+
+  - name: Run jenkins container
+    docker_container:
+      name: jenkins
+      image: jenkins_ansible
+      published_ports:
+        - "8080:8080"
+        - "50000:50000"
+      volumes:
+        - "/opt/jenkins:/var/jenkins_home"
+      env:
+        JENKINS_OPTS: --prefix=/jenkins
+      networks:
+        - name: cinet

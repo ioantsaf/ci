@@ -1,0 +1,20 @@
+---
+
+  - name: Build sonarqube image with custom url
+    docker_image:
+      path: "/home/{{ ci_user }}/ci/sonarqube"
+      name: sonarqube_custom_url
+
+  - name: Run sonarqube container
+    docker_container:
+      name: sonarqube
+      image: sonarqube_custom_url
+      published_ports:
+        - "9000:9000"
+        - "9092:9092"
+      env:
+        {'SONARQUBE_JDBC_URL': 'jdbc:mysql://mysql/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance&createDatabaseIfNotExist=true&useSSL=false',
+        'SONARQUBE_JDBC_USERNAME': 'sonar',
+        'SONARQUBE_JDBC_PASSWORD': "{{ mysql_sonar_pass }}"}
+      networks:
+        - name: cinet

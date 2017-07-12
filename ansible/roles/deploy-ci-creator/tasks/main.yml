@@ -1,0 +1,50 @@
+---
+
+  - name: Generate ssh key for user
+    user:
+      name: "{{ ci_creator_user }}"
+      generate_ssh_key: yes
+
+  - name: Copy CI files
+    copy:
+      src: ../../../../ci
+      dest: "/home/{{ ci_creator_user }}"
+
+  - name: Install required packages
+    apt: name={{ item }} state=latest
+    with_items:
+      - python-pip
+      - libssl-dev
+      - libffi-dev
+      - rabbitmq-server
+    become: true
+
+  - name: Install webapp requirements
+    pip:
+      requirements: /home/{{ ci_creator_user }}/ci/webapp/requirements.txt
+    become: true
+
+  - name: Include apache2 tasks
+    include: apache.yml
+    become: true
+
+  - name: Create ci/webapp/celery directory
+    file:
+      path: /home/{{ ci_creator_user }}/ci/webapp/celery
+      state: directory
+      owner: "{{ ci_creator_user }}"
+      group: "{{ ci_creator_user }}"
+      mode: 0755
+
+  - name: Change permissions of celery-init
+    file:
+      path: /home/{{ ci_creator_user }}/ci/webapp/celery-init
+      owner: "{{ ci_creator_user }}"
+      group: "{{ ci_creator_user }}"
+      mode: 0755
+
+  - name: Start Celery worker
+    command: ./celery-init start
+    args:
+      chdir: /home/{{ ci_creator_user }}/ci/webapp
+      creates: /home/{{ ci_creator_user }}/ci/webapp/celery/worker1.pid

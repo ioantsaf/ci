@@ -1,0 +1,42 @@
+---
+
+- hosts: production
+
+  vars:
+    - user: john1
+    - home_dir: /home/{{ user }}
+    - app_name: get-cash-app
+  
+  remote_user: "{{ user }}"
+
+  tasks:
+  - name: Install Packages
+    apt: name={{ item }} state=latest
+    with_items:
+      - npm
+      - git
+    become: true
+
+  - name: Install pm2 globally
+    npm: name=pm2 global=yes
+    become: true
+
+  - name: Create app directory
+    file: path={{ home_dir }}/{{ app_name }} state=directory
+
+  - name: Fetch latest git repo
+    git: repo="{{ lookup('env','GIT_URL') }}" version="{{ lookup('env','GIT_BRANCH ') }}" dest={{ home_dir }}/{{ app_name }} force=yes accept_hostkey=yes key_file={{ home_dir }}/id_rsa
+    register: gitresult
+    
+  - name: Run npm install
+    npm: path={{ home_dir }}/{{ app_name }}/ production=yes
+
+  - name: Start app, if it is not started
+    command: pm2 start server.js --name {{ app_name }} chdir={{ home_dir }}/{{ app_name }}/
+    register: pm2startresult
+    changed_when: "'Done' in pm2startresult.stdout"
+    failed_when: pm2startresult.rc != 0 and not "'Script already launched' in  pm2startresult.stderr"
+
+  - name: Restart app
+    command: pm2 restart {{ app_name }} chdir={{ home_dir }}/{{ app_name }}/
+    when: gitresult.changed and pm2startresult.rc != 0

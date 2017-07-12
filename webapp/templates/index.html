@@ -1,0 +1,131 @@
+<html>
+<head>
+    <title>CI creator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+<h1>Continous Integration (CI) creator</h1>
+<form id="createform" action="/deploy-ci" method="post" role="form">
+
+    <div class="row">
+        <div class="col-xs-6 form-group">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h2 class="panel-title"><b>Application</b></h2>
+                </div>
+                <div class="panel-content">
+                    <label for="app_name">App name</label>
+                    <input class="form-control" type="text" id="app_name" name="app_name">
+                    <label for="app_type">App type</label>
+                    <select class="form-control" id="app_type" name="app_type">
+                        <option value="nodejs">Node.js</option>
+                        <option value="django">Django</option>
+                        <option value="jetty">Jetty</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6 form-group">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h2 class="panel-title"><b>Continous Integration (CI)</b></h2>
+                </div>
+                <div class="panel-content">
+                    <label for="ci_host">CI hostname/IP</label>
+                    <input class="form-control" type="text" id="ci_host" name="ci_host">
+                    <label for="ci_user">CI host user</label>
+                    <input class="form-control" type="text" id="ci_user" name="ci_user">
+                    <label for="mysql_root_pass">SonarQube MySQL root password</label>
+                    <input class="form-control" type="text" id="mysql_root_pass"
+                           name="mysql_root_pass">
+                    <label for="mysql_sonar_pass">SonarQube MySQL sonar user password</label>
+                    <input class="form-control" type="text" id="mysql_sonar_pass"
+                           name="mysql_sonar_pass">
+                    <label for="pubkey">Public key for ssh connection to CI host
+                        (must be in CI host's ~/.ssh/authorized_keys
+                        before starting CI deployment)</label>
+                    <textarea readonly class="form-control selectbox" rows="3"
+                              id="pubkey" name="pubkey">{{ pubkey }}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6 form-group">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h2 class="panel-title"><b>Staging</b></h2>
+                </div>
+                <div class="panel-content">
+                    <label for="staging_host">Staging hostname/IP</label>
+                    <input class="form-control" type="text" id="staging_host" name="staging_host">
+                    <label for="staging_user">Staging host user</label>
+                    <input class="form-control" type="text" id="staging_user" name="staging_user">
+                    <label for="ci_pubkey1">
+                        Public key for ssh connection from CI to staging host
+                        (must be in staging host's ~/.ssh/authorized_keys
+                        before using the CI)</label></label>
+                    <textarea readonly class="form-control ci_pubkey selectbox" rows="3"
+                              id="ci_pubkey1" name="ci_pubkey1"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6 form-group">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h2 class="panel-title"><b>Production</b></h2>
+                </div>
+                <div class="panel-content">
+                    <label for="production_host">Production hostname/IP</label>
+                    <input class="form-control" type="text" id="production_host"
+                           name="production_host">
+                    <label for="production_user">Production host user</label>
+                    <input class="form-control" type="text" id="production_user"
+                           name="production_user">
+                    <label for="ci_pubkey1">
+                        Public key for ssh connection from CI to production host
+                        (must be in production host's ~/.ssh/authorized_keys
+                        before using the CI)</label></label>
+                    <textarea readonly class="form-control ci_pubkey selectbox" rows="3"
+                              id="ci_pubkey2" name="ci_pubkey2"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="text-center">
+                <button type="button" class="btn btn-primary btn-md"
+                        id="start-deployment-button">
+                    Start CI deployment
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="text-center">
+                <div class="error hidden" id="empty_fields_error">
+                    Please fill in all fields
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+<hr>
+<br><br>
+<div class="progress hidden">
+    <div class="progress-bar" role="progressbar"
+         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-value"></div>
+    </div>
+</div>
+
+</body>
+</html>

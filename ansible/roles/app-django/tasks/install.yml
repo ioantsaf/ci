@@ -1,0 +1,52 @@
+---
+
+  - name: Fix locale problem
+    command: update-locale LANGUAGE="en_US.UTF-8" LC_ALL="en_US.UTF-8"
+    become: true
+
+  - name: Install python-pip
+    apt:
+      name: python-pip
+      state: latest
+    become: true
+
+  - name: Install virtualenv
+    pip:
+      name: virtualenv
+    become: true
+
+  - name: Create virtualenv
+    command: virtualenv {{ ansible_env.HOME }}/{{ app_name }}/venv
+    args:
+      creates: "{{ ansible_env.HOME }}/{{ app_name }}/venv"
+
+  - name: Install django
+    pip:
+      name: django
+      virtualenv: "{{ ansible_env.HOME }}/{{ app_name }}/venv"
+
+  - name: Install git
+    apt:
+      name: git
+      state: latest
+    become: true
+
+  - name: Create .ssh directory
+    file:
+      path: "{{ ansible_env.HOME }}/.ssh"
+      state: directory
+      mode: 0700
+    become: true
+
+  - name: Copy ssh keypair
+    copy:
+      src: "~/.ssh/{{ item }}"
+      dest: "{{ ansible_env.HOME }}/.ssh/{{ item }}"
+      mode: 0600
+    with_items:
+      - id_rsa.pub
+      - id_rsa
+
+  - name: Include apache2 tasks
+    include: apache.yml
+    become: true

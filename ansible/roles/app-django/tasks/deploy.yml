@@ -1,0 +1,31 @@
+---
+
+  - name: Create app directory
+    file:
+      path: "{{ ansible_env.HOME }}/{{ app_name }}"
+      state: directory
+
+  - name: Fetch latest git repo
+    git:
+      repo: "{{ lookup('env','GIT_URL') or git_url }}"
+      version: "{{ lookup('env','GIT_BRANCH ') or git_branch }}"
+      dest: "{{ ansible_env.HOME }}/{{ app_name }}"
+      force: yes
+      accept_hostkey: yes
+      key_file: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+    register: gitresult
+
+  - name: Install app requirements
+    pip:
+      requirements: "{{ ansible_env.HOME }}/{{ app_name }}/requirements.txt"
+      virtualenv: "{{ ansible_env.HOME }}/{{ app_name }}/venv"
+
+  - name: Migrate django db
+    django_manage:
+      command: migrate
+      app_path: "{{ ansible_env.HOME }}/{{ app_name }}"
+
+  - name: Restart app
+    file:
+      path: "{{ ansible_env.HOME }}/{{ app_name }}/{{ app_name }}/wsgi.py"
+      state: touch

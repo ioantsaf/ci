@@ -1,0 +1,17 @@
+.form-control {
+    margin-bottom: 15px;
+}
+
+.progress-bar {
+    width: 0%;
+}
+
+.progress-value {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+.error {
+    color: red;
+}

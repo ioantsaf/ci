@@ -1,0 +1,13 @@
+---
+
+- hosts: ci
+
+  user: "{{ ci_user }}"
+
+  roles:
+    - { role: ci, when: deploy_ci_stage == 'ci' }
+    - { role: docker, when: deploy_ci_stage == 'docker' }
+    - { role: jenkins, when: deploy_ci_stage == 'jenkins' }
+    - { role: mysql, when: deploy_ci_stage == 'mysql' }
+    - { role: sonarqube, when: deploy_ci_stage == 'sonarqube' }
+    - { role: ci-apache, become: true, when: deploy_ci_stage == 'apache' }

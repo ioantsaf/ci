@@ -1,0 +1,48 @@
+---
+
+  - name: Install npm
+    apt:
+      name: npm
+      state: latest
+    become: true
+
+  - name: Make node symlink
+    file:
+      src: /usr/bin/nodejs
+      dest: /usr/bin/node
+      owner: root
+      group: root
+      state: link
+    become: true
+
+  - name: Install pm2 globally
+    npm:
+      name: pm2
+      global: yes
+    become: true
+
+  - name: Install git
+    apt:
+      name: git
+      state: latest
+    become: true
+
+  - name: Create .ssh directory
+    file:
+      path: "{{ ansible_env.HOME }}/.ssh"
+      state: directory
+      mode: 0700
+    become: true
+
+  - name: Copy ssh keypair
+    copy:
+      src: "~/.ssh/{{ item }}"
+      dest: "{{ ansible_env.HOME }}/.ssh/{{ item }}"
+      mode: 0600
+    with_items:
+      - id_rsa.pub
+      - id_rsa
+
+  - name: Include apache2 tasks
+    include: apache.yml
+    become: true

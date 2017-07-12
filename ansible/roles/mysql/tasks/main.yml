@@ -1,0 +1,15 @@
+---
+
+  - name: Run mysql container
+    docker_container:
+      name: mysql
+      image: mysql
+      volumes:
+        - "/opt/mysql:/var/lib/mysql"
+      env:
+        {'MYSQL_ROOT_PASSWORD': "{{ mysql_root_pass }}",
+        'MYSQL_DATABASE': 'sonar',
+        'MYSQL_USER': 'sonar',
+        'MYSQL_PASSWORD': "{{ mysql_sonar_pass }}"}
+      networks:
+        - name: cinet

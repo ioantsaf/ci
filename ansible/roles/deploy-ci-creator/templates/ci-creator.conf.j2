@@ -1,0 +1,27 @@
+<VirtualHost *:80>
+	RewriteEngine On
+	RewriteCond %{HTTPS} !=on
+	RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+</VirtualHost>
+
+<VirtualHost *:443>
+	ServerName {{ ansible_hostname }}
+	RewriteEngine On
+	Options FollowSymLinks
+
+	WSGIScriptAlias / /var/www/ci-creator/ci-creator.wsgi
+	<Directory /var/www/ci-creator>
+		Order deny,allow
+		Allow from all
+	</Directory>
+
+	SSLEngine ON
+	SSLCertificateFile /etc/apache2/ssl/server.crt
+	SSLCertificateKeyFile /etc/apache2/ssl/server.key
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet

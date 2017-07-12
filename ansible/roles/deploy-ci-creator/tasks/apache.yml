@@ -1,0 +1,101 @@
+---
+
+  - name: Install apache2 and libapache2-mod-wsgi packages
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - apache2
+      - libapache2-mod-wsgi
+
+  - name: Install apache modules
+    apache2_module:
+      name: "{{item}}"
+      state: present
+    with_items:
+      - ssl
+      - rewrite
+    notify: restart apache2
+
+  - name: Create /etc/apache2/ssl directory
+    file:
+      path: /etc/apache2/ssl
+      state: directory
+      owner: root
+      group: root
+      mode: 0744
+
+  - name: Create self-signed certificate
+    command: openssl req -new -nodes -x509 -subj "/C=GR/CN={{ ansible_hostname }}" -days 3650 -keyout /etc/apache2/ssl/server.key -out /etc/apache2/ssl/server.crt -extensions v3_ca
+    args:
+      creates: /etc/apache2/ssl/server.crt
+
+  - name: Change permissions of private key
+    file:
+      path: /etc/apache2/ssl/server.key
+      owner: root
+      group: root
+      mode: 0400
+
+  - name: Change permissions of certificate
+    file:
+      path: /etc/apache2/ssl/server.crt
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Create /var/www/ci-creator directory
+    file:
+      path: /var/www/ci-creator
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Copy ci-creator wsgi script
+    template:
+      src: ci-creator.wsgi.j2
+      dest: /var/www/ci-creator/ci-creator.wsgi
+    notify:
+      - restart apache2
+
+  - name: Create /var/www/.ansible directory
+    file:
+      path: /var/www/.ansible
+      state: directory
+      owner: www-data
+      group: www-data
+      mode: 0755
+
+  - name: Copy public key to webapp/static
+    copy:
+      remote_src: True
+      src: /home/{{ ci_creator_user }}/.ssh/id_rsa.pub
+      dest: /home/{{ ci_creator_user }}/ci/webapp/static/
+      owner: "{{ ci_creator_user }}"
+      group: www-data
+      mode: 0644
+
+  - name: Copy ci-creator configuration
+    template:
+      src: ci-creator.conf.j2
+      dest: /etc/apache2/sites-available/ci-creator.conf
+    notify:
+      - restart apache2
+
+  - name: Disable default apache sites
+    command: a2dissite {{ item }}
+    args:
+      removes: /etc/apache2/sites-enabled/{{ item }}
+    with_items:
+      - 000-default.conf
+      - default-ssl.conf
+    notify:
+      - restart apache2
+
+  - name: Add ci-creator to sites-enabled
+    command: a2ensite ci-creator.conf
+    args:
+      creates: /etc/apache2/sites-enabled/ci-creator.conf
+    notify:
+      - restart apache2

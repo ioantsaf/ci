@@ -1,0 +1,30 @@
+<VirtualHost *:80>
+	RewriteEngine On
+	RewriteCond %{HTTPS} !=on
+	RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+</VirtualHost>
+
+<VirtualHost *:443>
+	ServerName {{ ansible_hostname }}
+	RewriteEngine On
+
+	SSLEngine ON
+	SSLCertificateFile /etc/apache2/ssl/server.crt
+	SSLCertificateKeyFile /etc/apache2/ssl/server.key
+
+	<Directory {{ ansible_env.HOME }}/{{ app_name }}/{{ app_name }}/>
+		<Files wsgi.py>
+			Require all granted
+		</Files>
+	</Directory>
+
+	WSGIDaemonProcess {{ ansible_hostname }} python-path={{ ansible_env.HOME }}/{{ app_name }} python-home={{ ansible_env.HOME }}/{{ app_name }}/venv
+	WSGIProcessGroup {{ ansible_hostname }}
+	WSGIScriptAlias / {{ ansible_env.HOME }}/{{ app_name }}/{{ app_name }}/wsgi.py
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet

@@ -1,0 +1,39 @@
+---
+
+  - name: Generate ssh key for user
+    user:
+      name: "{{ ci_user }}"
+      generate_ssh_key: yes
+
+  - name: Fetch public key from user to var
+    command: cat /home/{{ ci_user }}/.ssh/id_rsa.pub
+    register: pubkey
+
+  - name: Copy CI files
+    copy:
+      src: ../../../../ci
+      dest: "/home/{{ ci_user }}"
+
+  - name: Create Jenkins directory
+    file:
+      path: /opt/jenkins
+      state: directory
+      owner: "{{ ci_user }}"
+      group: "{{ ci_user }}"
+    become: true
+
+  - name: Set variables for app deployment
+    template:
+      src: deploy-app-vars.yml.j2
+      dest: /opt/jenkins/deploy-app-vars.yml
+
+  - name: Copy ssh keypair to jenkins dir
+    command: cp -r /home/ubuntu/.ssh/ /opt/jenkins/
+    args:
+      creates: /opt/jenkins/.ssh/
+
+  - name: Install git
+    apt:
+      name: git
+      state: latest
+    become: true

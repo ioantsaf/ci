@@ -1,0 +1,12 @@
+[ci-creator]
+155.207.122.180
+
+[ci]
+yummy-ci.westeurope.cloudapp.azure.com
+
+[staging]
+#yummy-staging.westeurope.cloudapp.azure.com ansible_user="{{ staging_user }}"
+155.207.122.182 ansible_user="{{ staging_user }}"
+
+[production]
+#yummy-production.westeurope.cloudapp.azure.com ansible_user="{{ production_user }}"

@@ -1,0 +1,11 @@
+---
+
+- hosts: staging, production
+
+  vars_files:
+    - deploy-app-vars.yml
+
+  roles:
+    - common
+    - { role: app-nodejs, when: app_type == 'nodejs' }
+    - { role: app-django, when: app_type == 'django' }
