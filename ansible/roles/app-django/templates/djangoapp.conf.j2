@@ -12,6 +12,8 @@
 	SSLCertificateFile /etc/apache2/ssl/server.crt
 	SSLCertificateKeyFile /etc/apache2/ssl/server.key
 
+	#https://docs.djangoproject.com/el/1.11/howto/deployment/wsgi/modwsgi/
+
 	<Directory {{ ansible_env.HOME }}/{{ app_name }}/{{ app_name }}/>
 		<Files wsgi.py>
 			Require all granted

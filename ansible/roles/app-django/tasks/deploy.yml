@@ -20,6 +20,11 @@
       requirements: "{{ ansible_env.HOME }}/{{ app_name }}/requirements.txt"
       virtualenv: "{{ ansible_env.HOME }}/{{ app_name }}/venv"
 
+  - name: Create django db migrations
+    django_manage:
+      command: makemigrations
+      app_path: "{{ ansible_env.HOME }}/{{ app_name }}"
+
   - name: Migrate django db
     django_manage:
       command: migrate
