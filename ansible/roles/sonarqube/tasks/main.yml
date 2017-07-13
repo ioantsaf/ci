@@ -4,6 +4,7 @@
     docker_image:
       path: "/home/{{ ci_user }}/ci/sonarqube"
       name: sonarqube_custom_url
+    become: true
 
   - name: Run sonarqube container
     docker_container:

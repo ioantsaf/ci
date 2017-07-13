@@ -4,6 +4,7 @@
     docker_image:
       path: "/home/{{ ci_user }}/ci/jenkins"
       name: jenkins_ansible
+    become: true
 
   - name: Run jenkins container
     docker_container:
