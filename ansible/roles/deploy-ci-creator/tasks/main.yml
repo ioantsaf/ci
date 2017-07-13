@@ -6,7 +6,7 @@
       generate_ssh_key: yes
 
   - name: Copy CI files
-    copy:
+    synchronize:
       src: ../../../../ci
       dest: "/home/{{ ci_creator_user }}"
 

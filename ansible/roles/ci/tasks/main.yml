@@ -10,7 +10,7 @@
     register: pubkey
 
   - name: Copy CI files
-    copy:
+    synchronize:
       src: ../../../../ci
       dest: "/home/{{ ci_user }}"
 
