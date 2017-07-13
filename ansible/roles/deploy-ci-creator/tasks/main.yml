@@ -9,6 +9,7 @@
     synchronize:
       src: ../../../../ci
       dest: "/home/{{ ci_creator_user }}"
+      checksum: yes
 
   - name: Install required packages
     apt: name={{ item }} state=latest

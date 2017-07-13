@@ -13,6 +13,7 @@
     synchronize:
       src: ../../../../ci
       dest: "/home/{{ ci_user }}"
+      checksum: yes
 
   - name: Create Jenkins directory
     file:
