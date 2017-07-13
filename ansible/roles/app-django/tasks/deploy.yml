@@ -5,15 +5,11 @@
       path: "{{ ansible_env.HOME }}/{{ app_name }}"
       state: directory
 
-  - name: Fetch latest git repo
-    git:
-      repo: "{{ lookup('env','GIT_URL') or git_url }}"
-      version: "{{ lookup('env','GIT_BRANCH ') or git_branch }}"
-      dest: "{{ ansible_env.HOME }}/{{ app_name }}"
-      force: yes
-      accept_hostkey: yes
-      key_file: "{{ ansible_env.HOME }}/.ssh/id_rsa"
-    register: gitresult
+  - name: Copy repository files
+    synchronize:
+      src: ../../../../
+      dest: "/home/{{ ci_user }}"
+      checksum: yes
 
   - name: Install app requirements
     pip:
