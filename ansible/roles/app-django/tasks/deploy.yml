@@ -7,8 +7,8 @@
 
   - name: Copy repository files
     synchronize:
-      src: ../../../../
-      dest: "/home/{{ ci_user }}"
+      src: ../../../../../
+      dest: "{{ ansible_env.HOME }}/{{ app_name }}"
       checksum: yes
 
   - name: Install app requirements
