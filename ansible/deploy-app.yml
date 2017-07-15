@@ -9,3 +9,4 @@
     - common
     - { role: app-nodejs, when: app_type == 'nodejs' }
     - { role: app-django, when: app_type == 'django' }
+    - { role: app-jetty, when: app_type == 'jetty' }

@@ -1,0 +1,93 @@
+---
+
+  - name: Determine if jetty is installed
+    command: ls {{ jetty_install_dir }}
+    register: jetty_current
+    ignore_errors: yes
+
+  - name: Determine if jetty is installed
+    set_fact:
+      jetty_required: false
+
+  - name: Determine if jetty is installed
+    set_fact:
+      jetty_required: true
+    when: jetty_current.stdout.find("jetty-distribution-{{ jetty_version }}") == -1
+
+  - name: Create jetty group
+    group:
+      name: "{{ jetty_user }}"
+      state: present
+      system: yes
+
+  - name: Create jetty install dir
+    file:
+      path: "{{ jetty_install_dir }}"
+      state: directory
+      recurse: yes
+    when: jetty_required
+
+  - name: Create jetty user
+    user:
+      name: "{{ jetty_user }}"
+      state: present
+      group: "{{ jetty_user }}"
+      createhome: yes
+      home: "{{ jetty_install_dir }}/temp"
+      shell: /bin/false
+      system: yes
+
+  - name: Download jetty tarball
+    get_url:
+      url: "http://central.maven.org/maven2/org/eclipse/jetty/jetty-distribution/{{ jetty_version }}/jetty-distribution-{{ jetty_version }}.tar.gz"
+      dest: "{{ jetty_install_dir }}"
+    when: jetty_required
+
+  - name: Unarchive jetty
+    unarchive:
+      src: "{{ jetty_install_dir }}/jetty-distribution-{{ jetty_version }}.tar.gz"
+      dest: "{{ jetty_install_dir }}"
+      remote_src: yes
+      owner: "{{ jetty_user }}"
+      group: "{{ jetty_user }}"
+    when: jetty_required
+
+  - name: Create symbolic link to distribution
+    file:
+      src: "{{ jetty_install_dir }}/jetty-distribution-{{ jetty_version }}"
+      dest: "{{ jetty_install_dir }}/current"
+      state: link
+      force: yes
+    when: jetty_required
+
+  - name: Create symbolic link to logs
+    file:
+      src: "{{ jetty_install_dir }}/current/logs"
+      dest: "/var/log/jetty"
+      state: link
+
+  - name: Create jetty run dir
+    file:
+      path: "{{ jetty_install_dir }}/run"
+      state: directory
+      owner: "{{ jetty_user }}"
+      group: "{{ jetty_user }}"
+
+  - name: Copy jetty configuration file
+    template:
+      src: jetty.j2
+      dest: /etc/default/jetty
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Link jetty init script
+    file:
+      src: "{{ jetty_install_dir }}/current/bin/jetty.sh"
+      dest: /etc/init.d/jetty
+      state: link
+
+  - name: Enable jetty service
+    service:
+      name: jetty
+      enabled: yes

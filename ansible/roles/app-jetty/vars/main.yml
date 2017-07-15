@@ -1,0 +1,5 @@
+---
+
+jetty_version: '9.4.6.v20170531'
+jetty_install_dir: /opt/jetty
+jetty_user: jetty

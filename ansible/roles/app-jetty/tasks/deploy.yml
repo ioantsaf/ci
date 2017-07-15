@@ -1,0 +1,23 @@
+---
+
+  - name: Create app directory
+    file:
+      path: "{{ ansible_env.HOME }}/{{ app_name }}"
+      state: directory
+
+  - name: Copy repository files
+    synchronize:
+      src: ../../../../../
+      dest: "{{ ansible_env.HOME }}/{{ app_name }}"
+      checksum: yes
+    become: true
+    notify: restart jetty
+
+  - name: Change owner of jetty app directory
+    file:
+      path: "{{ ansible_env.HOME }}/{{ app_name }}"
+      owner: "{{ jetty_user }}"
+      group: "{{ jetty_user }}"
+      state: directory
+      recurse: yes
+    become: true
