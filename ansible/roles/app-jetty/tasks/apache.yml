@@ -1,0 +1,69 @@
+---
+
+  - name: Install apache2 package
+    apt:
+      name: apache2
+      state: latest
+
+  - name: Install apache modules
+    apache2_module:
+      name: "{{item}}"
+      state: present
+    with_items:
+      - ssl
+      - rewrite
+      - proxy
+      - proxy_http
+      - headers
+    notify: restart apache2
+
+  - name: Create /etc/apache2/ssl directory
+    file:
+      path: /etc/apache2/ssl
+      state: directory
+      owner: root
+      group: root
+      mode: 0744
+
+  - name: Create self-signed certificate
+    command: openssl req -new -nodes -x509 -subj "/C=GR/CN={{ ansible_hostname }}" -days 3650 -keyout /etc/apache2/ssl/server.key -out /etc/apache2/ssl/server.crt -extensions v3_ca
+    args:
+      creates: /etc/apache2/ssl/server.crt
+
+  - name: Change permissions of private key
+    file:
+      path: /etc/apache2/ssl/server.key
+      owner: root
+      group: root
+      mode: 0400
+
+  - name: Change permissions of certificate
+    file:
+      path: /etc/apache2/ssl/server.crt
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Copy apache configuration
+    template:
+      src: jettyapp.conf.j2
+      dest: /etc/apache2/sites-available/jettyapp.conf
+    notify:
+      - restart apache2
+
+  - name: Disable default apache sites
+    command: a2dissite {{ item }}
+    args:
+      removes: /etc/apache2/sites-enabled/{{ item }}
+    with_items:
+      - 000-default.conf
+      - default-ssl.conf
+    notify:
+      - restart apache2
+
+  - name: Add jettyapp to sites-enabled
+    command: a2ensite jettyapp.conf
+    args:
+      creates: /etc/apache2/sites-enabled/jettyapp.conf
+    notify:
+      - restart apache2

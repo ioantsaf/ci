@@ -6,12 +6,6 @@
       state: latest
     become: true
 
-#  - name: Install maven
-#    apt:
-#      name: maven
-#      state: latest
-#    become: true
-
   - name: Install git
     apt:
       name: git
@@ -20,4 +14,8 @@
 
   - name: Include jetty tasks
     include: jetty.yml
+    become: true
+
+  - name: Include apache2 tasks
+    include: apache.yml
     become: true

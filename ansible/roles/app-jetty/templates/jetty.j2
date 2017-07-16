@@ -5,10 +5,5 @@ JETTY_RUN={{ jetty_install_dir }}/run
 JETTY_PID={{ jetty_install_dir }}/run/jetty.pid
 JETTY_STATE={{ jetty_install_dir }}/run/jetty.state
 JETTY_START_LOG={{ jetty_install_dir }}/run/jetty-start.log
-{% if jetty_host is defined %}
-JETTY_ARGS="jetty.host={{ jetty_host }}"
-{% endif %}
-{% if jetty_java_options is defined %}
-JAVA_OPTIONS="{{ jetty_java_options }}"
-{% endif %}
+JETTY_ARGS="jetty.port=8080"
 TMPDIR={{ jetty_install_dir }}/temp

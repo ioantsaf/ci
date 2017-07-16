@@ -1,0 +1,33 @@
+<VirtualHost *:80>
+	RewriteEngine On
+	RewriteCond %{HTTPS} !=on
+	RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+</VirtualHost>
+
+<VirtualHost *:443>
+	ServerName {{ ansible_hostname }}
+	RewriteEngine On
+
+	SSLEngine ON
+	SSLCertificateFile /etc/apache2/ssl/server.crt
+	SSLCertificateKeyFile /etc/apache2/ssl/server.key
+
+	ProxyRequests Off
+	ProxyPreserveHost On
+	RequestHeader set X-Forwarded-Proto "https"
+	RequestHeader set X-Forwarded-Port "443"
+
+	<Proxy http://localhost:8080/*>
+		Order deny,allow
+		Allow from all
+	</Proxy>
+
+	ProxyPass / http://localhost:8080/
+	ProxyPassReverse / http://localhost:8080/
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
