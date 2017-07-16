@@ -1,6 +1,0 @@
----
-
-app_name: "jetty_example"
-app_type: "jetty"
-staging_user: "ubuntu"
-production_user: "dwsdwdw"
