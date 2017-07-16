@@ -52,7 +52,13 @@
       group: "{{ jetty_user }}"
     when: jetty_required
 
-  - name: Create symbolic link to distribution
+  - name: Delete jetty tarball
+    file:
+      path: "{{ jetty_install_dir }}/jetty-distribution-{{ jetty_version }}.tar.gz"
+      state: absent
+    when: jetty_required
+
+  - name: Create symbolic link to current distribution
     file:
       src: "{{ jetty_install_dir }}/jetty-distribution-{{ jetty_version }}"
       dest: "{{ jetty_install_dir }}/current"
