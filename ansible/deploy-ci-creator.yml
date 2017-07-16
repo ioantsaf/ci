@@ -5,4 +5,4 @@
   user: "{{ ci_creator_user }}"
 
   roles:
-    - deploy-ci-creator
+    - ci-creator
