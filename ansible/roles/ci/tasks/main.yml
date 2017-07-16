@@ -28,6 +28,11 @@
       src: deploy-app-vars.yml.j2
       dest: /opt/jenkins/deploy-app-vars.yml
 
+  - name: Set inventory for app deployment
+    template:
+      src: hosts.j2
+      dest: /opt/jenkins/ansible-hosts
+
   - name: Copy ssh keypair to jenkins dir
     command: cp -r /home/ubuntu/.ssh/ /opt/jenkins/
     args:
