@@ -19,3 +19,4 @@
         JENKINS_OPTS: --prefix=/jenkins
       networks:
         - name: cinet
+    become: true

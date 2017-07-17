@@ -19,3 +19,4 @@
         'SONARQUBE_JDBC_PASSWORD': "{{ mysql_sonar_pass }}"}
       networks:
         - name: cinet
+    become: true
