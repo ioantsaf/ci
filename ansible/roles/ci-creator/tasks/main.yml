@@ -8,7 +8,7 @@
   - name: Copy CI files
     synchronize:
       src: ../../../../ci
-      dest: "/home/{{ ci_creator_user }}"
+      dest: "{{ ansible_env.HOME }}"
       checksum: yes
 
   - name: Install required packages
@@ -31,7 +31,7 @@
 
   - name: Create ci/webapp/celery directory
     file:
-      path: /home/{{ ci_creator_user }}/ci/webapp/celery
+      path: "{{ ansible_env.HOME }}/ci/webapp/celery"
       state: directory
       owner: "{{ ci_creator_user }}"
       group: "{{ ci_creator_user }}"
@@ -39,7 +39,7 @@
 
   - name: Change permissions of celery-init
     file:
-      path: /home/{{ ci_creator_user }}/ci/webapp/celery-init
+      path: "{{ ansible_env.HOME }}/ci/webapp/celery-init"
       owner: "{{ ci_creator_user }}"
       group: "{{ ci_creator_user }}"
       mode: 0755
@@ -47,5 +47,5 @@
   - name: Start Celery worker
     command: ./celery-init start
     args:
-      chdir: /home/{{ ci_creator_user }}/ci/webapp
-      creates: /home/{{ ci_creator_user }}/ci/webapp/celery/worker1.pid
+      chdir: "{{ ansible_env.HOME }}/ci/webapp"
+      creates: "{{ ansible_env.HOME }}/ci/webapp/celery/worker1.pid"

@@ -6,13 +6,13 @@
       generate_ssh_key: yes
 
   - name: Fetch public key from user to var
-    command: cat /home/{{ ci_user }}/.ssh/id_rsa.pub
+    command: "cat {{ ansible_env.HOME }}/.ssh/id_rsa.pub"
     register: pubkey
 
   - name: Copy CI files
     synchronize:
       src: ../../../../ci
-      dest: "/home/{{ ci_user }}"
+      dest: "{{ ansible_env.HOME }}"
       checksum: yes
 
   - name: Create Jenkins directory
@@ -34,7 +34,7 @@
       dest: /opt/jenkins/ansible-hosts
 
   - name: Copy ssh keypair to jenkins dir
-    command: cp -r /home/ubuntu/.ssh/ /opt/jenkins/
+    command: "cp -r {{ ansible_env.HOME }}/.ssh/ /opt/jenkins/"
     args:
       creates: /opt/jenkins/.ssh/
 
