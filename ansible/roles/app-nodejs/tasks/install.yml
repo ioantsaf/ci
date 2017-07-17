@@ -1,5 +1,9 @@
 ---
 
+  - name: Fix locale problem
+    command: update-locale LANGUAGE="en_US.UTF-8" LC_ALL="en_US.UTF-8"
+    become: true
+
   - name: Install npm
     apt:
       name: npm
