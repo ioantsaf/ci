@@ -1,0 +1,9 @@
+.jumbotron {
+    position: relative;
+    background: transparent;
+    padding: 0 10%;
+}
+
+h1 {
+    text-align: center;
+}

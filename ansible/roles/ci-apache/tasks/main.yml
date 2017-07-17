@@ -45,6 +45,16 @@
       group: root
       mode: 0644
 
+  - name: Copy ci homepage files
+    copy:
+      src: www/ci
+      dest: /var/www/
+
+  - name: Copy ci homepage html
+    template:
+      src: www/ci/index.html.j2
+      dest: /var/www/ci/index.html
+
   - name: Copy ci configuration
     template:
       src: ci.conf.j2

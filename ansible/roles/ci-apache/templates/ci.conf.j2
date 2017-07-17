@@ -18,6 +18,8 @@
 	RequestHeader set X-Forwarded-Proto "https"
 	RequestHeader set X-Forwarded-Port "443"
 
+	DocumentRoot /var/www/ci
+
 	<Proxy http://localhost:8080/jenkins*>
 		Order deny,allow
 		Allow from all
