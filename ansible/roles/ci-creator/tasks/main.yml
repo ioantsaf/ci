@@ -53,3 +53,9 @@
     args:
       chdir: "{{ ansible_env.HOME }}/ci/webapp"
       creates: "{{ ansible_env.HOME }}/ci/webapp/celery/worker1.pid"
+
+  - name: Add cronjob to start Celery worker on reboot
+    cron:
+      name: "Start Celery worker"
+      special_time: reboot
+      job: "cd {{ ansible_env.HOME }}/ci/webapp/ && export PATH=$PATH:/usr/local/bin && ./celery-init start"
