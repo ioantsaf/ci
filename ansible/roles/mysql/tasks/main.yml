@@ -13,4 +13,5 @@
         'MYSQL_PASSWORD': "{{ mysql_sonar_pass }}"}
       networks:
         - name: cinet
+      restart_policy: unless-stopped
     become: true

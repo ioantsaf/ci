@@ -19,4 +19,5 @@
         JENKINS_OPTS: --prefix=/jenkins
       networks:
         - name: cinet
+      restart_policy: unless-stopped
     become: true
