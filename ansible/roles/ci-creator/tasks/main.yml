@@ -29,6 +29,20 @@
       requirements: /home/{{ ci_creator_user }}/ci/webapp/requirements.txt
     become: true
 
+  - name: Build docs
+    command: mkdocs build
+    args:
+      chdir: "{{ ansible_env.HOME }}/ci/webapp"
+      creates: "{{ ansible_env.HOME }}/ci/webapp/site"
+
+  - name: Change docs owner
+    file:
+      path: "{{ ansible_env.HOME }}/ci/webapp/site"
+      owner: www-data
+      group: www-data
+      recurse: yes
+    become: true
+
   - name: Include apache2 tasks
     include: apache.yml
     become: true

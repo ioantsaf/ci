@@ -1,0 +1,12 @@
+site_name: CI Usage Guide
+pages:
+    - Home: index.md
+    - Δημιουργία του CI creator: deploy_ci_creator.md
+    - Δημιουργία ενός CI μέσω του CI creator: create_ci.md
+    - Παραμετροποίηση του Jenkins: configure_jenkins.md
+    - Παραμετροποίηση του SonarQube: configure_sonarqube.md
+    - Σύνδεση του Jenkins με το SonarQube: jenkins-sonarqube.md
+    - Ρύθμιση του κλειδιού SSH στο Jenkins: ssh_credentials.md
+    - Δημιουργία CI Project στο Jenkins: ci_project.md
+    - Ρύθμιση αυτόματου SCM build trigger: scm_trigger.md
+theme: readthedocs

@@ -9,7 +9,10 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='app.css') }}">
 </head>
 <body>
-<h1>Continuous Integration (CI) creator</h1>
+<h1>
+    Continuous Integration (CI) creator
+    <span id="userguide"><a href="/docs">Usage Guide</a></span>
+</h1>
 <form id="createform" action="/deploy-ci" method="post" role="form">
 
     <div class="row">
