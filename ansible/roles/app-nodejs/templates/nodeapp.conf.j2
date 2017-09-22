@@ -18,8 +18,7 @@
 	RequestHeader set X-Forwarded-Port "443"
 
 	<Proxy http://localhost:3000/*>
-		Order deny,allow
-		Allow from all
+		Require all granted
 	</Proxy>
 
 	ProxyPass / http://localhost:3000/

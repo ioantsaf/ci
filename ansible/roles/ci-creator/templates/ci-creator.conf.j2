@@ -11,8 +11,7 @@
 
 	WSGIScriptAlias / /var/www/ci-creator/ci-creator.wsgi
 	<Directory /var/www/ci-creator>
-		Order deny,allow
-		Allow from all
+		Require all granted
 	</Directory>
 
 	SSLEngine ON

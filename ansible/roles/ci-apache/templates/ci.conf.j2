@@ -21,16 +21,14 @@
 	DocumentRoot /var/www/ci
 
 	<Proxy http://localhost:8080/jenkins*>
-		Order deny,allow
-		Allow from all
+		Require all granted
 	</Proxy>
 
 	ProxyPass /jenkins http://localhost:8080/jenkins nocanon
 	ProxyPassReverse /jenkins http://localhost:8080/jenkins
 
 	<Proxy http://localhost:9000/sonarqube*>
-		Order deny,allow
-		Allow from all
+		Require all granted
 	</Proxy>
 
 	ProxyPass /sonarqube http://localhost:9000/sonarqube
