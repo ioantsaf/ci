@@ -29,7 +29,7 @@
 Το URL αυτό αποτελεί το URL του Jenkins, στο εσωτερικό Docker network. Με τη χρήση του webhook, επιτυγχάνουμε την ενημέρωση του SonarQube Quality Gate, που θα ενσωματώσουμε στα Jenkins CI Pipelines.
 
 
-### Αλλαγή κωδικού πρόσβασης ασφαλείας, και δημιουργία Jenkins token
+### Αλλαγή κωδικού πρόσβασης, και δημιουργία Jenkins token
 
 Πατάμε το σύμβολο "A", στην πάνω δεξιά γωνία, και επιλέγουμε "My Account":
 ![](screenshots/3_config_sonar/7_my_account.png)
