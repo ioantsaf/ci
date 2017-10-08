@@ -5,5 +5,5 @@ JETTY_RUN={{ jetty_install_dir }}/run
 JETTY_PID={{ jetty_install_dir }}/run/jetty.pid
 JETTY_STATE={{ jetty_install_dir }}/run/jetty.state
 JETTY_START_LOG={{ jetty_install_dir }}/run/jetty-start.log
-JETTY_ARGS="jetty.port=8080"
+JETTY_ARGS="jetty.port={{ app_port | default('8080') }}"
 TMPDIR={{ jetty_install_dir }}/temp

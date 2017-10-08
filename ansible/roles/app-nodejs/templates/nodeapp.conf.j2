@@ -17,12 +17,12 @@
 	RequestHeader set X-Forwarded-Proto "https"
 	RequestHeader set X-Forwarded-Port "443"
 
-	<Proxy http://localhost:3000/*>
+	<Proxy http://localhost:{{ app_port | default('3000') }}/*>
 		Require all granted
 	</Proxy>
 
-	ProxyPass / http://localhost:3000/
-	ProxyPassReverse / http://localhost:3000/
+	ProxyPass / http://localhost:{{ app_port | default('3000') }}/
+	ProxyPassReverse / http://localhost:{{ app_port | default('3000') }}/
 
 	ErrorLog ${APACHE_LOG_DIR}/error.log
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
