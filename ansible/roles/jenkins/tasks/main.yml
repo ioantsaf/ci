@@ -20,4 +20,9 @@
       networks:
         - name: cinet
       restart_policy: unless-stopped
+      # Remove security opts, if not running Chrome
+      # https://hub.docker.com/r/justinribeiro/chrome-headless/
+      # https://github.com/jessfraz/dotfiles/blob/master/etc/docker/seccomp/chrome.json
+      security_opts:
+        - "seccomp: {{ lookup('file', 'chrome.json') | safe }}"
     become: true
