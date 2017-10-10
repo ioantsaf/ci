@@ -19,6 +19,22 @@
       state: link
     become: true
 
+  - name: Install n node version management
+    npm:
+      name: "n"
+      global: yes
+    become: true
+
+  - name: Install latest node version
+    command: n stable
+    become: true
+
+  - name: Install latest npm version
+    npm:
+      name: npm
+      global: yes
+    become: true
+
   - name: Install pm2 globally
     npm:
       name: pm2
