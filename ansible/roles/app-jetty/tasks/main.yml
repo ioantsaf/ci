@@ -1,7 +1,7 @@
 ---
 
   - name: Install required packages
-    include: install.yml
+    include_tasks: install.yml
 
   - name: Deploy app
-    include: deploy.yml
+    include_tasks: deploy.yml

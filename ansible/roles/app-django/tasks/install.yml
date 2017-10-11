@@ -32,5 +32,5 @@
     become: true
 
   - name: Include apache2 tasks
-    include: apache.yml
+    include_tasks: apache.yml
     become: true
