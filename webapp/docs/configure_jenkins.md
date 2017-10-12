@@ -48,7 +48,9 @@
 
 * Ansible plugin
 * AnsiColor
+* Environment Injector Plugin
 * SonarQube Scanner for Jenkins
+* Blue Ocean (αν θέλουμε να χρησιμοποιήσουμε το νέο Jenkins UI)
 
 ![](screenshots/1_init_jenkins/7_available_plugins.png)
 
