@@ -60,8 +60,8 @@ def run_playbook(playbook, host_list, vars):
 
 
 if __name__ == "__main__":
-    host_list = {'ci': 'yummy-staging.westeurope.cloudapp.azure.com'}
-    vars = {'app_name': 'yummy', 'app_type': 'nodejs', 'ci_user': 'john1', 'mysql_pass': 'changeme',
+    host_list = {'ci': 'cihost'}
+    vars = {'app_name': 'testapp', 'app_type': 'nodejs', 'ci_user': 'john1', 'mysql_pass': 'changeme',
             'staging_host': 'dummyhost1', 'staging_user': 'dummyuser1',
             'production_host': 'dummyhost2', 'production_user': 'dummyuser2'}
     vars['deploy_ci_stage'] = 'ci'
