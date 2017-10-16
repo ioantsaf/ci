@@ -1,8 +1,26 @@
 # Δημιουργία CI project στο Jenkins
 
-Στο βήμα αυτό, δημιουργούμε ένα νέο CI project, στο Jenkins. Χρησιμοποιείται scripted pipeline, μέσω αρχείου Jenkinsfile, το οποίο έχει δημιουργηθεί εκ των προτέρων, και βρίσκεται checked out στο source control repository, μέσα στο project.  
-Για περισσότερες πληροφορίες για την συγγραφή του Jenkinsfile, μπορούμε να απευθυνθούμε στο [Jenkins documentation](https://jenkins.io/doc/book/pipeline/jenkinsfile), είτε στα παραδείγματα, που υλοποιήθηκαν ως μέρος της εργασίας.
+Στο βήμα αυτό, δημιουργούμε ένα νέο CI project, στο Jenkins.
 
+
+### Ενσωμάτωση του κώδικα CI σε ένα υπάρχον project λογισμικού
+
+Για να συμπεριλάβουμε το αποθετήριο, που δημιουργήθηκε για την ροή εργασίας του CI, σε ένα δικό μας project λογισμικού, χρησιμοποιούμε Git submodule. Μέσα στο Git αποθετήριο του project μας, τρέχουμε τις εξής εντολές:
+
+* git submodule add <ci repository clone url>
+* git submodule update --init –recursive
+
+Στη συνέχεια, πραγματοποιούμε:
+
+* git add
+* git commit
+
+
+Για το Jenkins CI build, χρησιμοποιείται scripted pipeline, μέσω αρχείου Jenkinsfile, το οποίο πρέπει να έχουμε δημιουργήσει εκ των προτέρων, και να έχουμε κάνει check out στο source control αποθετήριο του project μας.
+Για περισσότερες πληροφορίες για την συγγραφή του Jenkinsfile, μπορούμε να απευθυνθούμε στο [Jenkins documentation](https://jenkins.io/doc/book/pipeline/jenkinsfile), είτε στα παραδείγματα, που υλοποιήθηκαν ως μέρος της εργασίας. Τα παραδείγματα αυτά βρίσκονται στο αποθετήριο ci, στον φάκελο Jenkinsfile_examples.
+
+
+### Δημιουργία project στο Jenkins Web UI, και εκτέλεση CI build
 
 Επιλέγουμε "New item":
 ![](screenshots/6_jenkins_project/1_new_item.png)
