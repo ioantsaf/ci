@@ -1,0 +1,42 @@
+---
+
+  - name: Fix locale problem
+    command: update-locale LANGUAGE="en_US.UTF-8" LC_ALL="en_US.UTF-8"
+    become: true
+
+  - name: Install npm
+    apt:
+      name: npm
+      state: latest
+    become: true
+
+  - name: Make node symlink
+    file:
+      src: /usr/bin/nodejs
+      dest: /usr/bin/node
+      owner: root
+      group: root
+      state: link
+    become: true
+
+  - name: Install n node version management
+    npm:
+      name: n
+      global: yes
+    become: true
+
+  - name: Install latest node version
+    command: n stable
+    become: true
+
+  - name: Install latest npm version
+    npm:
+      name: npm
+      global: yes
+    become: true
+
+  - name: Install pm2 globally
+    npm:
+      name: pm2
+      global: yes
+    become: true

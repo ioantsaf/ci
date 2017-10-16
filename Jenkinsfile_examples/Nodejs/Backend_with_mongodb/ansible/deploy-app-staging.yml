@@ -1,0 +1,11 @@
+---
+
+- hosts: staging
+
+  vars_files:
+    - deploy-app-vars.yml
+
+  roles:
+    - docker
+    - mongodb
+    - app-nodejs

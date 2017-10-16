@@ -1,0 +1,10 @@
+---
+
+  - name: Run mongodb container
+    docker_container:
+      name: mongodb
+      image: mongo
+      published_ports:
+        - "27017:27017"
+      restart_policy: unless-stopped
+    become: true
