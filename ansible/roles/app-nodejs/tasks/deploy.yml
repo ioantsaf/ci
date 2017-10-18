@@ -26,3 +26,6 @@
   - name: Restart app
     command: pm2 restart {{ app_name }} chdir={{ ansible_env.HOME }}/{{ app_name }}/{{ app_subdir }}
     when: pm2startresult.rc != 0
+
+  - name: Save running pm2 processes
+    command: pm2 save

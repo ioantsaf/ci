@@ -41,6 +41,10 @@
       global: yes
     become: true
 
+  - name: Setup pm2 startup
+    command: pm2 startup -u {{ ansible_user }} --hp {{ ansible_env.HOME }}
+    become: true
+
   - name: Install git
     apt:
       name: git
