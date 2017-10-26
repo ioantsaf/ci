@@ -19,10 +19,10 @@
 * build timeout plugin
 * Timestamper
 * Workspace Cleanup Plugin
-* NodeJS Plugin (αν το project είναι NodeJS)
+* NodeJS Plugin (αν το έργο λογισμικού είναι NodeJS)
 * Pipeline
 * Pipeline: Stage View Plugin
-* Bitbucket Plugin (αν χρησιμοποιούμε Bitbucket)
+* Bitbucket Plugin (αν χρησιμοποιούμε BitBucket)
 * Git plugin
 * Άλλα επιθυμητά plugins (π.χ. Mailer Plugin, αν θέλουμε ειδοποιήσεις μέσω mail, κ.ά.)
 
