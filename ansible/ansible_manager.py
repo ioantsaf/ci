@@ -3,10 +3,10 @@ from collections import namedtuple
 
 from ansible import constants as constants
 from ansible.executor.playbook_executor import PlaybookExecutor
-from ansible.inventory import Inventory
+from ansible.inventory.manager import InventoryManager
 from ansible.inventory.group import Group
 from ansible.parsing.dataloader import DataLoader
-from ansible.vars import VariableManager
+from ansible.vars.manager import VariableManager
 
 
 def run_playbook(playbook, host_list, vars):
@@ -20,25 +20,21 @@ def run_playbook(playbook, host_list, vars):
                                      'module_path', 'forks', 'remote_user', 'private_key_file',
                                      'ssh_common_args', 'ssh_extra_args', 'sftp_extra_args',
                                      'scp_extra_args', 'become', 'become_method', 'become_user',
-                                     'verbosity', 'check'])
-    variable_manager = VariableManager()
+                                     'verbosity', 'check', 'diff'])
     loader = DataLoader()
+    variable_manager = VariableManager(loader=loader)
 
     options = Options(listtags=False, listtasks=False, listhosts=False, syntax=False,
                       connection='ssh', module_path=None, forks=100, remote_user=None,
                       private_key_file=None, ssh_common_args=None, ssh_extra_args=None,
                       sftp_extra_args=None, scp_extra_args=None, become=False, become_method='sudo',
-                      become_user='root', verbosity=None, check=False)
+                      become_user='root', verbosity=None, check=False, diff=False)
     passwords = {}
 
-    inventory = Inventory(loader=loader, variable_manager=variable_manager,
-                          host_list=host_list.values())
-    all_group = inventory.get_group('all')
-    all_hosts = all_group.get_hosts()
-    ci_group = Group(name='ci')
-    ci_group.add_host(all_hosts[0])
-    all_group.add_child_group(ci_group)
-    inventory.add_group(ci_group)
+    inventory = InventoryManager(loader=loader)
+    inventory.add_group('ci')
+    inventory.add_host(host_list.values()[0], 'ci')
+    inventory.reconcile_inventory()
 
     variable_manager.set_inventory(inventory)
     variable_manager.extra_vars = vars
@@ -61,7 +57,8 @@ def run_playbook(playbook, host_list, vars):
 
 if __name__ == "__main__":
     host_list = {'ci': 'cihost'}
-    vars = {'app_name': 'testapp', 'app_type': 'nodejs', 'ci_user': 'john1', 'mysql_pass': 'changeme',
+    vars = {'app_name': 'testapp', 'app_type': 'nodejs', 'ci_user': 'dummyuser0',
+            'mysql_pass': 'changeme',
             'staging_host': 'dummyhost1', 'staging_user': 'dummyuser1',
             'production_host': 'dummyhost2', 'production_user': 'dummyuser2'}
     vars['deploy_ci_stage'] = 'ci'
