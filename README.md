@@ -14,7 +14,7 @@ inside the `ci-creator` host group.
 2. `cd` into the `<ci_repository>/ansible/` directory, and issue the command: 
 `ansible-playbook deploy-ci-creator.yml -i hosts --extra-vars "ci_creator_user=<ci_creator_user_name>"`,  
 where ci_creator_user_name is the user that will be running the CI creator app.
-SSH access is required.
+SSH and access is required. The user must be able to run sudo without a password.
 
 To obtain more info about creating and using CIs, consult the documentation in webapp/docs,
 or on the "Usage Guide" link, on the CI creator host (`<ci_creator_url>/docs`).
